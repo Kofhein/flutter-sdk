@@ -1,8 +1,9 @@
 import 'package:logger/logger.dart';
 
 Logger getLogger(String className) {
-  var output = MultiOutput([memory, ConsoleOutput()]);
-  return Logger(output: output, printer: InternalLogPrinter(className));
+  // var output = MultiOutput([memory, ConsoleOutput()]);
+  // return Logger(output: output, printer: InternalLogPrinter(className));
+  return Logger(level: Level.trace);
 }
 
 BufferMemoryOutput memory = BufferMemoryOutput(bufferSize: maxLogHistorySize);
