@@ -11,14 +11,10 @@ dependencies:
   eventify: ^1.0.1
   flutter:
     sdk: flutter
-  logger: ^1.4.0
-  http: ^1.1.0
-  web_socket_channel: ^2.3.0
-  flutter_webrtc:
-   git:
-      url: https://github.com/Kofhein/flutter-webrtc
-      ref: elinux
-
+  logger: ^2.7.0
+  flutter_webrtc: ^1.4.1
+  http: ^1.6.0
+  web_socket_channel: ^3.0.3
   jwt_decode: ^0.3.1
   sdp_transform: ^0.3.2
 
@@ -27,7 +23,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.1
   dartdoc: ^6.1.1
-  test: ^1.21.4
+  # test: ^1.21.4
   build_runner: ^2.3.0
   mockito: ^5.3.2
   dotenv: ^4.0.1
