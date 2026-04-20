@@ -463,6 +463,7 @@ class PeerConnection extends EventEmitter {
     }
 
     peer.onRenegotiationNeeded = () async {
+      _logger.i('Peer renegotiation needed');
       RTCSessionDescription? remoteSdp = await peer.getRemoteDescription();
       if (remoteSdp == null) {
         return;
