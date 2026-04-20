@@ -111,12 +111,21 @@ class Director {
           jsonDecode(response.body)['data'];
       // Handle a failed POST request
       if (response.statusCode != 200) {
-        final error = FetchException(responseBody['message'], 
-                                      response.statusCode);
+        final error =
+            FetchException(responseBody['message'], response.statusCode);
         throw error;
       }
       MillicastDirectorResponse data =
           MillicastDirectorResponse.fromJson(responseBody);
+      final iceServers = (responseBody['iceServers'] as List)
+          .map((server) => {
+                'urls': server['urls'],
+                'username': server['username'],
+                'credential': server['credential'],
+              })
+          .toList();
+      Config.iceServers = {'iceServers': iceServers ?? {}};
+      print('ICE SERVERS PUBLISHER: ${Config.iceServers}');
       parseIncomingDirectorResponse(data);
       _logger.d('Getting publisher response:${response.body}');
       return data;
@@ -174,13 +183,22 @@ class Director {
           jsonDecode(response.body)['data'];
       // Handle a failed POST request
       if (response.statusCode != 200) {
-        final error = FetchException(responseBody['message'], 
-                                      response.statusCode);
+        final error =
+            FetchException(responseBody['message'], response.statusCode);
         throw error;
       }
       MillicastDirectorResponse data =
           MillicastDirectorResponse.fromJson(responseBody);
       parseIncomingDirectorResponse(data);
+      final iceServers = (responseBody['iceServers'] as List)
+          .map((server) => {
+                'urls': server['urls'],
+                'username': server['username'],
+                'credential': server['credential'],
+              })
+          .toList();
+      Config.iceServers = {'iceServers': iceServers ?? {}};
+      print('ICE SERVERS SUBSCRIBER: ${Config.iceServers}');
       _logger.d('Getting subscriber response:${response.body}');
       return data;
     } catch (e) {

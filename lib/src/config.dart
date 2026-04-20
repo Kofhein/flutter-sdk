@@ -6,4 +6,5 @@ class Config {
   static const String millicastEventsLocation =
       'wss://streamevents.millicast.com/ws';
   static const String millicastFixedAccountId = '';
+  static Map<String, dynamic> iceServers = {};
 }
