@@ -33,8 +33,6 @@ class View extends BaseWebRTC {
 
   Function? stopReemitingSignalingInstanceEvents;
 
-  Completer<void> _readyCompleter = Completer<void>();
-
   View(
       {required String streamName,
       required Function tokenGenerator,
@@ -49,19 +47,10 @@ class View extends BaseWebRTC {
       webRTCPeer.on(webRTCEvents['track'], this, (ev, context) {
         RTCTrackEvent track = ev.eventData as RTCTrackEvent;
         if (track.streams.isNotEmpty) {
-          if (track.track.kind == 'video') {
-            if (!_readyCompleter.isCompleted) {
-              _readyCompleter.complete();
-            }
-          }
           mediaElement.srcObject = track.streams[0];
         }
       });
     }
-  }
-
-  Future<void> waitForVideoTrack() {
-    return _readyCompleter.future;
   }
 
   /// Connects to an active stream as subscriber.
