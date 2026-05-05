@@ -91,9 +91,9 @@ class Signaling extends EventEmitter {
   /// ```dart
   /// millicastSignaling.close();
   /// ```
-  void close() {
+  Future<void> close() async {
     _logger.i('Closing connection with Signaling Server.');
-    transactionManager?.close();
+    await transactionManager?.close();
   }
 
   /// Establish WebRTC connection with Millicast Server as Subscriber role.

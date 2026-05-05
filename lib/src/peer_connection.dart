@@ -85,7 +85,7 @@ class PeerConnection extends EventEmitter {
 
   /// Close RTC peer connection.
   ///
-  closeRTCPeer() async {
+  Future<void> closeRTCPeer() async {
     _logger.i('Closing RTCPeerConnection');
     await peer?.close();
     peer = null;

@@ -163,9 +163,9 @@ class TransactionManager extends EventEmitter {
     transport.sink.add(json);
   }
 
-  close() {
+  Future close() async {
     //remove listeners
     listener?.onDone(() {});
-    transport.sink.close();
+    await transport.sink.close();
   }
 }

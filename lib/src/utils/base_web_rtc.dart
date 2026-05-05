@@ -54,10 +54,10 @@ class BaseWebRTC extends EventEmitter {
   }
 
   /// Stops connection.
-  stop() {
+  Future<void> stop() async {
     logger.i('Stopping');
-    webRTCPeer.closeRTCPeer();
-    signaling?.close();
+    await webRTCPeer.closeRTCPeer();
+    await signaling?.close();
     signaling = null;
     webRTCPeer = PeerConnection();
   }
