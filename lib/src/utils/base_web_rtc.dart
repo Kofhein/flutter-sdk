@@ -85,21 +85,22 @@ class BaseWebRTC extends EventEmitter {
       signaling?.isMigrating = false;
     });
     if (autoReconnect) {
-      signaling?.on(SignalingEvents.connectionError, this, (event, context) {
+      signaling?.on(SignalingEvents.connectionError, this,
+          (event, context) async {
         if ((firstReconnection == null || alreadyDisconnected == false)) {
           firstReconnection = false;
-          reconnect();
+          await reconnect();
         }
       });
 
       webRTCPeer.on(webRTCEvents['connectionStateChange'], this,
-          (event, context) {
+          (event, context) async{
         var state = event.eventData;
         if ((state == 'failed' ||
                 (state == 'disconnected' && alreadyDisconnected!)) &&
             firstReconnection!) {
           firstReconnection = false;
-          reconnect();
+         await reconnect();
         } else if (state == 'disconnected') {
           alreadyDisconnected = true;
           Timer(const Duration(milliseconds: 1500), () => reconnect());
@@ -112,7 +113,7 @@ class BaseWebRTC extends EventEmitter {
 
   /// Reconnects to last broadcast.
   ///
-  reconnect() async {
+  Future<void> reconnect() async {
     try {
       if (stopReconnection) {
         return;

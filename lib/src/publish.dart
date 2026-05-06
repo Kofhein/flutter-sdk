@@ -60,9 +60,9 @@ class Publish extends BaseWebRTC {
   }
 
   @override
-  reconnect() {
+  Future<void> reconnect() async {
     options?['mediaStream'] = options?['mediaStream'] ?? webRTCPeer.getTracks();
-    super.reconnect();
+    await super.reconnect();
   }
 
   initConnection(Map<dynamic, dynamic> data) async {
@@ -80,12 +80,12 @@ class Publish extends BaseWebRTC {
       publisherData = await tokenGenerator();
     } on FetchException catch (error) {
       _logger.e('Error generating token.');
-      if(error.status == 401) {
+      if (error.status == 401) {
         // should not reconnect
         this.stopReconnection = true;
       } else {
         // should reconnect with exponential back off
-        reconnect();
+        await reconnect();
       }
       rethrow;
     } catch (error) {
@@ -154,16 +154,16 @@ class Publish extends BaseWebRTC {
     PeerConnection? oldWebRTCPeer = webRTCPeer;
     signaling = signalingInstance;
     webRTCPeer = webRTCPeerInstance;
-    setReconnect();
+    await setReconnect();
 
     if (data['migrate']) {
       webRTCPeer.on(webRTCEvents['connectionStateChange'], webRTCPeer,
           (ev, context) async {
         if (ev.eventData ==
             RTCIceConnectionState.RTCIceConnectionStateConnected) {
-          Timer(const Duration(milliseconds: 1000), () {
-            oldSignlaling?.close();
-            oldWebRTCPeer?.closeRTCPeer();
+          Timer(const Duration(milliseconds: 1000), () async {
+            await oldSignlaling?.close();
+            await oldWebRTCPeer?.closeRTCPeer();
             oldSignlaling = null;
             oldWebRTCPeer = null;
             _logger.i('Current connection migrated');
@@ -173,8 +173,8 @@ class Publish extends BaseWebRTC {
           RTCIceConnectionState.RTCIceConnectionStateFailed,
           RTCIceConnectionState.RTCIceConnectionStateDisconnected
         ].contains(ev.eventData)) {
-          oldSignlaling?.close();
-          oldWebRTCPeer?.closeRTCPeer();
+          await oldSignlaling?.close();
+          await oldWebRTCPeer?.closeRTCPeer();
           oldSignlaling = null;
           oldWebRTCPeer = null;
         }
